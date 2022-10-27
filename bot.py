@@ -78,16 +78,17 @@ async def today(message: Message):
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
         rasp = json.load(file)
-
-    for item in rasp[this_day]:
-        if len(item) == 2:
-            text = f"{item[0]['time']} - {item[0]['name']}\n{item[0]['place']}{lesson_types[item[0]['type']]}\n{item[0]['teacher']}\n{item[0]['group']}\n\n{item[1]['time']} - {item[1]['name']}{lesson_types[item[1]['type']]}\n{item[1]['place']}\n{item[1]['teacher']}\n{item[1]['group']}"
-        elif item["name"] == '':
-            continue
-        else:
-            text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
-
-        await bot.send_message(message.from_user.id, text)
+    try:
+        for item in rasp[this_day]:
+            if len(item) == 2:
+                text = f"{item[0]['time']} - {item[0]['name']}\n{item[0]['place']}{lesson_types[item[0]['type']]}\n{item[0]['teacher']}\n{item[0]['group']}\n\n{item[1]['time']} - {item[1]['name']}{lesson_types[item[1]['type']]}\n{item[1]['place']}\n{item[1]['teacher']}\n{item[1]['group']}"
+            elif item["name"] == '':
+                continue
+            else:
+                text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
+            await bot.send_message(message.from_user.id, text)
+    except:
+        await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
 
 
 @dp.message_handler(text='Завтра')
@@ -96,15 +97,16 @@ async def tomorrow(message: Message):
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
         rasp = json.load(file)
-
-    for item in rasp[this_day]:
-        if len(item) == 2:
-            text = f"{item[0]['time']} - {item[0]['name']}\n{item[0]['place']}{lesson_types[item[0]['type']]}\n{item[0]['teacher']}\n{item[0]['group']}\n\n{item[1]['time']} - {item[1]['name']}{lesson_types[item[1]['type']]}\n{item[1]['place']}\n{item[1]['teacher']}\n{item[1]['group']}"
-        elif item["name"] == '':
-            continue
-        else:
-            text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
-        await bot.send_message(message.from_user.id, text)
-
+    try:
+        for item in rasp[this_day]:
+            if len(item) == 2:
+                text = f"{item[0]['time']} - {item[0]['name']}\n{item[0]['place']}{lesson_types[item[0]['type']]}\n{item[0]['teacher']}\n{item[0]['group']}\n\n{item[1]['time']} - {item[1]['name']}{lesson_types[item[1]['type']]}\n{item[1]['place']}\n{item[1]['teacher']}\n{item[1]['group']}"
+            elif item["name"] == '':
+                continue
+            else:
+                text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
+            await bot.send_message(message.from_user.id, text)
+    except:
+        await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
 
 executor.start_polling(dp, skip_updates=True)
