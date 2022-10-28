@@ -38,8 +38,7 @@ button4 = KeyboardButton("Номер недели")
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
 keyboard.row(button1, button2).add(button4).add(button3)
 
-current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-week = int(current_date.strftime('%W')) - 34
+
 
 
 @dp.message_handler(commands=['start'])
@@ -65,6 +64,8 @@ async def send_week(message: types.Message):
 
 @dp.message_handler(text='Номер недели')
 async def collect_data(message: types.Message):
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    week = int(current_date.strftime('%W')) - 34
     try:
 
         await bot.send_message(message.from_user.id, week)
@@ -74,6 +75,8 @@ async def collect_data(message: types.Message):
 
 @dp.message_handler(text='Сегодня')
 async def today(message: Message):
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    week = int(current_date.strftime('%W')) - 34
     num_day = current_date.weekday()
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
@@ -93,6 +96,8 @@ async def today(message: Message):
 
 @dp.message_handler(text='Завтра')
 async def tomorrow(message: Message):
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    week = int(current_date.strftime('%W')) - 34
     num_day = current_date.weekday() + 1
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
