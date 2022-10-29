@@ -23,7 +23,8 @@ days = [
     "Среда",
     "Четверг",
     "Пятница",
-    "Суббота"
+    "Суббота",
+    "Воскресенье"
 ]
 
 # proxy = 'socks5://45.139.187.21:45656'
@@ -36,9 +37,7 @@ button2 = KeyboardButton("Завтра")
 button3 = KeyboardButton("Загрузить данные")
 button4 = KeyboardButton("Номер недели")
 keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
-keyboard.row(button1, button2).add(button4).add(button3)
-
-
+keyboard.row(button1, button2).row(button3, button4)
 
 
 @dp.message_handler(commands=['start'])
@@ -67,17 +66,22 @@ async def collect_data(message: types.Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
     week = int(current_date.strftime('%W')) - 34
     try:
-
         await bot.send_message(message.from_user.id, week)
     except:
         await bot.send_message(message.from_user.id, "Что-то пошло не так")
 
 
-@dp.message_handler(text='Сегодня')
+@dp.message_handler(text=['Сегодня', 'Завтра'])
 async def today(message: Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
     week = int(current_date.strftime('%W')) - 34
     num_day = current_date.weekday()
+
+    if message.text == 'Сегодня':
+        num_day = current_date.weekday()
+    else:
+        num_day = current_date.weekday() + 1
+
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
         rasp = json.load(file)
@@ -91,27 +95,11 @@ async def today(message: Message):
                 text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
             await bot.send_message(message.from_user.id, text)
     except:
-        await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
+        if num_day == 6:
+            # get_rasp()
+            await bot.send_message(message.from_user.id, 'В этот день выходной')
+        else:
+            await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
 
-
-@dp.message_handler(text='Завтра')
-async def tomorrow(message: Message):
-    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
-    num_day = current_date.weekday() + 1
-    this_day = days[num_day]
-    with open("rasp.json", "r", encoding="utf8") as file:
-        rasp = json.load(file)
-    try:
-        for item in rasp[this_day]:
-            if len(item) == 2:
-                text = f"{item[0]['time']} - {item[0]['name']}\n{item[0]['place']}{lesson_types[item[0]['type']]}\n{item[0]['teacher']}\n{item[0]['group']}\n\n{item[1]['time']} - {item[1]['name']}{lesson_types[item[1]['type']]}\n{item[1]['place']}\n{item[1]['teacher']}\n{item[1]['group']}"
-            elif item["name"] == '':
-                continue
-            else:
-                text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
-            await bot.send_message(message.from_user.id, text)
-    except:
-        await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
 
 executor.start_polling(dp, skip_updates=True)
