@@ -3,11 +3,11 @@ import requests
 import json
 import datetime
 
-current_date = datetime.datetime.now()
-week = int(current_date.strftime('%W')) - 34
 
-
-def get_rasp(url=f"https://ssau.ru/rasp?groupId=530994177&selectedWeek={week}"):
+def get_rasp():
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    week = int(current_date.strftime('%W')) - 34
+    url = f"https://ssau.ru/rasp?groupId=530994177&selectedWeek={week}"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/104.0.5112.102 Safari/537.36 OPR/90.0.4480.84'}

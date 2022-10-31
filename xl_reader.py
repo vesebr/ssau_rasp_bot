@@ -66,7 +66,7 @@ def read_excel():
         "Воскресенье": 6
     }
 
-    current_date = datetime.datetime.now()
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
     week = int(current_date.strftime('%W')) - 34
     day = int(current_date.strftime('%w')) - 1
 
