@@ -56,22 +56,6 @@ def read_excel(week):
             "group": "9-17 нед.",
             "type": "4"}
     }
-    week_days = {
-        "Понедельник": 0,
-        "Вторник": 1,
-        "Среда": 2,
-        "Четверг": 3,
-        "Пятница": 4,
-        "Суббота": 5,
-        "Воскресенье": 6
-    }
-
-    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    # week = int(current_date.strftime('%W')) - 34
-    # day = int(current_date.strftime('%w')) - 1
-
-    book = openpyxl.load_workbook(f'{2 if week % 2 == 0 else 1}.xlsx', read_only=True)
-    sheet = book.active
 
     for j in range(1, 3):
         lessons = []
@@ -89,8 +73,8 @@ def read_excel(week):
                     "day": sheet[f'A{i}'].value
                 }
                 lessons.append(lessons_info)
-
             else:
                 continue
+
         with open(f"dop_lessons{j}.json", "w", encoding="utf8") as file:
             json.dump(lessons, file, sort_keys=False, indent=4, ensure_ascii=False)

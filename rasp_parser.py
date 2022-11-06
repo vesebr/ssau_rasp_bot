@@ -1,12 +1,9 @@
 from bs4 import BeautifulSoup
 import requests
 import json
-import datetime
 
 
 def get_rasp(week):
-    # current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    # week = int(current_date.strftime('%W')) - 34
     url = f"https://ssau.ru/rasp?groupId=530994177&selectedWeek={week}"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -70,11 +67,8 @@ def get_rasp(week):
                 "teacher": '',
                 "group": '',
                 "type": 0
-
             }
             lessons.append(lesson_info)
 
     with open("lessons.json", 'w', encoding="utf8") as file:
         json.dump(lessons, file, sort_keys=False, indent=4, ensure_ascii=False)
-
-
