@@ -1,10 +1,11 @@
+import datetime
 import json
+
+import surrogates
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 from aiogram.utils import executor
-import datetime
-from aiogram.types import ContentType, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove, InputFile, Message
-import surrogates
 
 from json_creator import make_rasp_json
 from rasp_parser import get_rasp
@@ -16,7 +17,7 @@ lesson_types = {
     "3": surrogates.decode('\uD83D\uDFE5'),
     "4": surrogates.decode('\uD83D\uDFE8')
 }
-# %uD83D%uDFE5//%uD83D%uDFE6//%uD83D%uDFE9//%uD83D%uDFE8
+
 days = [
     "Понедельник",
     "Вторник",
@@ -27,7 +28,6 @@ days = [
     "Воскресенье"
 ]
 
-# proxy = 'socks5://45.139.187.21:45656'
 Token = '5677926444:AAFUXCXR5xX9PRDJVO0dihz_6oEE0SBrrsA'
 bot = Bot(token=Token)
 dp = Dispatcher(bot)
@@ -52,10 +52,18 @@ async def command_start(message: types.Message):
 
 @dp.message_handler(text='Загрузить данные')
 async def send_week(message: types.Message):
+    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    week = int(current_date.strftime('%W')) - 34
     try:
-        get_rasp()
-        read_excel()
-        make_rasp_json()
+        if current_date.weekday() == 6:
+            get_rasp(week + 1)
+            read_excel(week + 1)
+            make_rasp_json(week + 1)
+        else:
+            get_rasp(week)
+            read_excel(week)
+            make_rasp_json(week)
+
         await bot.send_message(message.from_user.id, "Данные загружены")
     except:
         await bot.send_message(message.from_user.id, "Что-то пошло не так")
@@ -66,7 +74,7 @@ async def collect_data(message: types.Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
     week = int(current_date.strftime('%W')) - 34
     try:
-        await bot.send_message(message.from_user.id, week)
+        await bot.send_message(message.from_user.id, str(week))
     except:
         await bot.send_message(message.from_user.id, "Что-то пошло не так")
 
@@ -74,13 +82,14 @@ async def collect_data(message: types.Message):
 @dp.message_handler(text=['Сегодня', 'Завтра'])
 async def today(message: Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
-    num_day = current_date.weekday()
 
     if message.text == 'Сегодня':
         num_day = current_date.weekday()
     else:
-        num_day = current_date.weekday() + 1
+        if current_date.weekday() == 6:
+            num_day = 0
+        else:
+            num_day = current_date.weekday() + 1
 
     this_day = days[num_day]
     with open("rasp.json", "r", encoding="utf8") as file:
@@ -96,7 +105,6 @@ async def today(message: Message):
             await bot.send_message(message.from_user.id, text)
     except:
         if num_day == 6:
-            # get_rasp()
             await bot.send_message(message.from_user.id, 'В этот день выходной')
         else:
             await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")

@@ -3,7 +3,7 @@ import datetime
 import json
 
 
-def read_excel():
+def read_excel(week):
     list_lessons = {
         "Общие сведения об аддитивном производстве-Агапровичев А. В. (7 нед.);Материалы и оборудование для аддитивных технологий-Агапровичев А. В. (9 нед.); 3D печать технологиями SLS, SLM, EBM- Ивченко А. В. (15 нед.);3D печать технологиями SLS, SLM, EBM- Агаповичев А. В. (17 нед.) On-line": {
             "name": "3D печать технологиями SLS, SLM, EBM",
@@ -67,8 +67,8 @@ def read_excel():
     }
 
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
-    day = int(current_date.strftime('%w')) - 1
+    # week = int(current_date.strftime('%W')) - 34
+    # day = int(current_date.strftime('%w')) - 1
 
     book = openpyxl.load_workbook(f'{2 if week % 2 == 0 else 1}.xlsx', read_only=True)
     sheet = book.active
