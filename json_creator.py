@@ -2,12 +2,12 @@ import json
 import datetime
 
 
-def make_rasp_json():
+def make_rasp_json(week):
     with open("lessons.json", "r", encoding="utf8") as file:
         data = json.load(file)
 
-    current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
+    # current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
+    # week = int(current_date.strftime('%W')) - 34
 
     days = [
         "Понедельник",
