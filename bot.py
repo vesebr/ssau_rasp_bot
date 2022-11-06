@@ -1,5 +1,6 @@
 import datetime
 import json
+import time
 
 import surrogates
 from aiogram import Bot, types
@@ -43,6 +44,7 @@ keyboard.row(button1, button2).row(button3, button4)
 @dp.message_handler(commands=['start'])
 async def command_start(message: types.Message):
     try:
+        time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Привет. Сначала загрузи данные, потом смотри расписание",
                                reply_markup=keyboard)
         await message.delete()
@@ -63,9 +65,10 @@ async def send_week(message: types.Message):
             get_rasp(week)
             read_excel(week)
             make_rasp_json(week)
-
+        time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Данные загружены")
     except:
+        time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Что-то пошло не так")
 
 
@@ -74,8 +77,10 @@ async def collect_data(message: types.Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
     week = int(current_date.strftime('%W')) - 34
     try:
+        time.sleep(0.5)
         await bot.send_message(message.from_user.id, str(week))
     except:
+        time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Что-то пошло не так")
 
 
@@ -102,11 +107,14 @@ async def today(message: Message):
                 continue
             else:
                 text = f"{item['time']} - {item['name']}{lesson_types[item['type']]}\n{item['place']}\n{item['teacher']}\n{item['group']}"
+            time.sleep(0.5)
             await bot.send_message(message.from_user.id, text)
     except:
         if num_day == 6:
+            time.sleep(0.5)
             await bot.send_message(message.from_user.id, 'В этот день выходной')
         else:
+            time.sleep(0.5)
             await bot.send_message(message.from_user.id, "Ошибка. Загрузите данные")
 
 
