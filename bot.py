@@ -67,9 +67,9 @@ async def send_week(message: types.Message):
             make_rasp_json(week)
         time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Данные загружены")
-    except:
+    except Exception as ex:
         time.sleep(0.5)
-        await bot.send_message(message.from_user.id, "Что-то пошло не так")
+        await bot.send_message(message.from_user.id, ex)
 
 
 @dp.message_handler(text='Номер недели')
