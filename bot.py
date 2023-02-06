@@ -59,11 +59,11 @@ async def send_week(message: types.Message):
     try:
         if current_date.weekday() == 6:
             get_rasp(week + 1)
-            read_excel(week + 1)
+            #read_excel(week + 1)
             make_rasp_json(week + 1)
         else:
             get_rasp(week)
-            read_excel(week)
+            #read_excel(week)
             make_rasp_json(week)
         time.sleep(0.5)
         await bot.send_message(message.from_user.id, "Данные загружены")
