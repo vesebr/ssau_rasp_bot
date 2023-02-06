@@ -38,10 +38,10 @@ def make_rasp_json(week):
                 lesson['time'] = time[time_counter]
             time_counter += 1
 
-    with open(f"dop_lessons{2 if week % 2 == 0 else 1}.json", "r", encoding="utf8") as file:
-        dop_data = json.load(file)
-    for item in dop_data:
-        day_lessons_list[item["day"]].append(item)
+   # with open(f"dop_lessons{2 if week % 2 == 0 else 1}.json", "r", encoding="utf8") as file:
+       # dop_data = json.load(file)
+    #for item in dop_data:
+       # day_lessons_list[item["day"]].append(item)
 
     with open("rasp.json", "w", encoding="utf8") as file:
         json.dump(day_lessons_list, file, sort_keys=False, indent=4, ensure_ascii=False)
