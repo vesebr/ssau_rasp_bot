@@ -75,7 +75,7 @@ async def send_week(message: types.Message):
 @dp.message_handler(text='Номер недели')
 async def collect_data(message: types.Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
+    week = int(current_date.strftime('%W')) - 5
     try:
         time.sleep(0.5)
         await bot.send_message(message.from_user.id, str(week))
