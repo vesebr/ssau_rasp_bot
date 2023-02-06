@@ -55,7 +55,7 @@ async def command_start(message: types.Message):
 @dp.message_handler(text='Загрузить данные')
 async def send_week(message: types.Message):
     current_date = datetime.datetime.now(tz=datetime.timezone(datetime.timedelta(hours=4)))
-    week = int(current_date.strftime('%W')) - 34
+    week = int(current_date.strftime('%W')) - 5
     try:
         if current_date.weekday() == 6:
             get_rasp(week + 1)
